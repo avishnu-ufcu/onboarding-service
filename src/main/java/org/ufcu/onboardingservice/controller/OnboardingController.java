@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.ufcu.onboardingservice.dto.RetailOnboardingRequest;
 import org.ufcu.onboardingservice.dto.RetailOnboardingResponse;
 import org.ufcu.onboardingservice.domain.Onboarding_Case;
+import org.ufcu.onboardingservice.dto.UpdateOnboardingCaseRequest;
 import org.ufcu.onboardingservice.service.OnboardingService;
 import org.ufcu.onboardingservice.util.ValidationUtil;
 
@@ -49,6 +51,16 @@ public class OnboardingController {
         // Map entity to response DTO
         RetailOnboardingResponse response = new RetailOnboardingResponse(onboarding.getCaseId(), onboarding.getStatus().name());
 
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PatchMapping("/cases/update")
+    public ResponseEntity<RetailOnboardingResponse> updateOnboardingCase(
+            @Valid @RequestBody UpdateOnboardingCaseRequest request) {
+        log.info("Updating onboarding case: {} with customerId: {} and status: {}", request.getCaseId(), request.getCustomerId(), request.getStatus());
+        // Optionally validate status value
+        Onboarding_Case onboarding = onboardingService.updateOnboardingCase(request.getCaseId(), request.getCustomerId(), request.getStatus());
+        RetailOnboardingResponse response = new RetailOnboardingResponse(onboarding.getCaseId(), onboarding.getStatus().name());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

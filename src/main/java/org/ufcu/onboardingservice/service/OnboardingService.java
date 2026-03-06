@@ -67,4 +67,24 @@ public class OnboardingService {
             throw new CaseCreationFailedException("Failed to approve onboarding case: " + ex.getMessage(), ex);
         }
     }
+
+    /**
+     * Update onboarding case with caseId, customerId, and status
+     */
+    public Onboarding_Case updateOnboardingCase(String caseId, String customerId, String status) {
+        try {
+            Onboarding_Case onboarding = onboardingCaseRepository.findById(caseId)
+                    .orElseThrow(() -> new CaseCreationFailedException("Onboarding case not found: " + caseId));
+
+            onboarding.setCustomerId(customerId);
+            onboarding.setStatus(Onboarding_Case.OnboardingStatus.valueOf(status));
+            Onboarding_Case saved = onboardingCaseRepository.save(onboarding);
+
+            log.info("Onboarding case updated successfully with caseId: {}", saved.getCaseId());
+            return saved;
+        } catch (Exception ex) {
+            log.error("Unexpected error while updating onboarding case: {}", ex.getMessage());
+            throw new CaseCreationFailedException("Failed to update onboarding case: " + ex.getMessage(), ex);
+        }
+    }
 }
