@@ -54,7 +54,7 @@ public class OnboardingController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PatchMapping("/cases/update")
+    @PatchMapping("/cases/status")
     public ResponseEntity<RetailOnboardingResponse> updateOnboardingCase(
             @Valid @RequestBody UpdateOnboardingCaseRequest request) {
         log.info("Updating onboarding case: {} with customerId: {} and status: {}", request.getCaseId(), request.getCustomerId(), request.getStatus());
