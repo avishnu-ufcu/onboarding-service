@@ -3,13 +3,12 @@ package org.ufcu.onboardingservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ufcu.onboardingservice.dto.RetailOnboardingRequest;
 import org.ufcu.onboardingservice.domain.Onboarding_Case;
 import org.ufcu.onboardingservice.exception.CaseCreationFailedException;
 import org.ufcu.onboardingservice.repository.OnboardingCaseRepository;
 import org.ufcu.onboardingservice.util.OnboardingCaseIdGenerator;
-
-import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -21,6 +20,7 @@ public class OnboardingService {
     /**
      * Process retail onboarding request and persist Onboarding_Case entity
      */
+    @Transactional
     public Onboarding_Case initiateRetailOnboarding(RetailOnboardingRequest request) {
 
         try {
@@ -50,6 +50,7 @@ public class OnboardingService {
         }
     }
 
+    @Transactional
     public Onboarding_Case approveOnboardingCase(String caseId) {
         // Validation moved to controller
         try {
@@ -71,6 +72,7 @@ public class OnboardingService {
     /**
      * Update onboarding case with caseId, customerId, and status
      */
+    @Transactional
     public Onboarding_Case updateOnboardingCase(String caseId, String customerId, String status) {
         try {
             Onboarding_Case onboarding = onboardingCaseRepository.findById(caseId)
